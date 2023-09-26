@@ -1,0 +1,41 @@
+plugins {
+    id 'groovy'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    //You should place rest-assured before the JUnit dependency declaration
+    // in order to make sure that the correct version of Hamcrest is used.
+    implementation 'io.rest-assured:rest-assured:5.3.1'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.10.0'
+    implementation 'org.apache.groovy:groovy:4.0.2'
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation platform("org.spockframework:spock-bom:2.3-groovy-4.0")
+    testImplementation 'org.spockframework.spock:spock-core:spock-2.3'
+
+    // optional dependencies for using Spock
+    testImplementation "org.hamcrest:hamcrest-core:2.2"   // only necessary if Hamcrest matchers are used
+
+    // you can use testRuntimeClasspath if you don't want to use spock-report-specific features in your Specs
+    testImplementation( "com.athaydes:spock-reports:2.5.1-groovy-4.0" ) {
+        transitive = false // this avoids affecting your version of Groovy/Spock
+    }
+    testImplementation 'org.slf4j:slf4j-api:1.7.13'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.13'
+}
+
+test {
+    //for parallel tests run via gradle
+    //maxParallelForks = Runtime.runtime.availableProcessors() // maxParallelForks=1 by default
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
